@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Análisis de CV</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- Elimina estilos internos para centralizar en styles.css -->
+    <script>
+        function showLoader() {
+            const form = document.getElementById('upload-form');
+            const loaderContainer = document.getElementById('loader-container');
+
+            form.style.display = 'none';
+            loaderContainer.classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Plataforma de Análisis de Habilidades</h1>
+    </header>
+
+    <main>
+        <h2>Bienvenido a la Plataforma de Análisis de Habilidades Blandas y Duras</h2>
+        <p>Analiza tu CV fácilmente con nuestras poderosas herramientas.</p>
+        <a href="{{ url_for('routes.upload_cv') }}">Subir tu CV</a>
+    </main>
+</body>
+</html>

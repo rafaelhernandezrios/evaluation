@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Inteligencias Múltiples</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- Eliminado el script de validación -->
+</head>
+<body>
+    <header>
+        <h1>Cuestionario de Inteligencias Múltiples</h1>
+    </header>
+    <main>
+        <p>Selecciona "Verdadero" o "Falso" para cada afirmación.</p>
+        <form action="{{ url_for('routes.multiple_intelligences_questionnaire', user_id=user_id) }}" method="POST">
+            {% for i in range(1, 29) %}
+                <div class="question">
+                    <label for="q{{ i }}">{{ i }}. {{ questions[i-1] }}</label><br>
+                    <div class="options">
+                        <input type="radio" name="q{{ i }}" id="q{{ i }}_true" value="true" required>
+                        <label for="q{{ i }}_true" class="option-label">Verdadero</label>
+                        <input type="radio" name="q{{ i }}" id="q{{ i }}_false" value="false">
+                        <label for="q{{ i }}_false" class="option-label">Falso</label>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- Añade más preguntas si es necesario -->
+            <button type="submit">Enviar respuestas</button>
+        </form>
+    </main>
+    <footer>
+        <p>© 2025 Cuestionario de Inteligencias Múltiples</p>
+    </footer>
+</body>
+</html>

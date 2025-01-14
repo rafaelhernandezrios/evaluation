@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CV</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script>
+        function showLoader() {
+            const form = document.getElementById('upload-form');
+            const loaderContainer = document.getElementById('loader-container');
+
+            form.style.display = 'none';
+            loaderContainer.classList.add('active'); 
+            // "active" activará la animación y mostrará el loader
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Carga tu CV</h1>
+    </header>
+
+    <main>
+        <!-- Loader Container, inicialmente oculto (CSS se encargará de esto) -->
+        <div id="loader-container" class="loading">
+            <div class="loader"></div>
+            <p>Analizando tu CV, por favor espera...</p>
+        </div>
+
+        <!-- Formulario principal -->
+        <form id="upload-form" 
+              action="{{ url_for('routes.process_cv') }}" 
+              method="post" 
+              enctype="multipart/form-data" 
+              onsubmit="showLoader()">
+            <label for="name">Nombre:</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="file">CV (PDF):</label>
+            <input type="file" name="file" id="file" accept=".pdf" required>
+
+            <button type="submit">Subir</button>
+        </form>
+    </main>
+</body>
+</html>

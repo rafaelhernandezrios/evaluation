@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- Asegúrate de que todos los estilos específicos se encuentren en styles.css -->
+</head>
+<body>
+    <header>
+        <h1>Gracias por participar! Aquí están tus resultados:</h1>
+    </header>
+
+    <main>
+        <!-- Información Existente -->
+        <section class="existing-info-section">
+            <h2>Información General</h2>
+            <div class="info-card">
+                <p><strong>Puntaje Total:</strong> {{ total_score }}</p>
+                <p><strong>Puntaje Inicial (Análisis de CV):</strong> {{ initial_score }}</p>
+                <p><strong>Puntaje por Respuestas (Cuestionario):</strong> {{ response_score }}</p>
+                <p><strong>Explicación Detallada:</strong> {{ detailed_explanation }}</p>
+            </div>
+        </section>
+
+        <!-- Sección de Inteligencias Múltiples -->
+        <section class="intelligences-section">
+            <h2>Resultados de Inteligencias Múltiples</h2>
+            {% for intelligence, data in intelligences_scores.items() %}
+            <div class="intelligence-card">
+                <h3>{{ intelligence }}</h3>
+                <p><strong>Puntaje:</strong> {{ data.score }}</p>
+                <p><strong>Nivel:</strong> 
+                    {% if data.level == "Nivel Alto" %}
+                        <span class="classification nivel-alto">{{ data.level }}</span>
+                    {% elif data.level == "Nivel Medio" %}
+                        <span class="classification nivel-medio">{{ data.level }}</span>
+                    {% else %}
+                        <span class="classification nivel-bajo">{{ data.level }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </section>
+
+        <!-- Sección de Habilidades Blandas -->
+        <section class="soft-skills-section">
+            <h2>Resultados de Habilidades Blandas</h2>
+            {% for competency, subcompetencies in soft_skills_classification.items() %}
+            <div class="competency-card">
+                <h3>{{ competency }}</h3>
+                <table class="soft-skills-table">
+                    <thead>
+                        <tr>
+                            <th>Subcompetencia</th>
+                            <th>Puntaje</th>
+                            <th>Clasificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub, result in subcompetencies.items() %}
+                        <tr>
+                            <td>{{ sub }}</td>
+                            <td>{{ result.score }}</td>
+                            <td>
+                                {% set class = "" %}
+                                {% if result.classification == "Muy Alto" %}
+                                    {% set class = "muy-alto" %}
+                                {% elif result.classification == "Alto" %}
+                                    {% set class = "alto" %}
+                                {% elif result.classification == "Medio" %}
+                                    {% set class = "medio" %}
+                                {% elif result.classification == "Bajo" %}
+                                    {% set class = "bajo" %}
+                                {% elif result.classification == "Muy Bajo" %}
+                                    {% set class = "muy-bajo" %}
+                                {% endif %}
+                                <span class="classification {{ class }}">{{ result.classification }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </section>
+
+        <!-- Botón Opcional: Volver al Inicio o Descargar Resultados -->
+        <div class="dashboard-section" style="text-align: center;">
+            <a href="{{ url_for('routes.index') }}" class="button-link">
+                <button>Volver al Inicio</button>
+            </a>
+            <!-- Puedes agregar más botones aquí si es necesario -->
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Plataforma de Análisis de CV</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responder las Preguntas</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fdf6f6; /* Blanco marfil */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            background: linear-gradient(135deg, #800000, #a00000); /* Guinda degradado */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        /* Main Styles */
+        main {
+            background: #ffffff; /* Blanco */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: left;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        main h2 {
+            color: #800000; /* Guinda */
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        main p {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        form div label {
+            display: block;
+            font-weight: bold;
+            color: #800000; /* Guinda */
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus {
+            border-color: #800000; /* Guinda */
+            box-shadow: 0 0 5px rgba(128, 0, 0, 0.3);
+            outline: none;
+        }
+
+        /* Buttons */
+        button {
+            background: #800000; /* Guinda */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease-in-out, transform 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #a00000; /* tono más oscuro de guinda */
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            main h2 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+    <script>
+        // Validación simple para asegurar que todos los campos estén llenos
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            const inputs = document.querySelectorAll("input[type='text']");
+            let valid = true;
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.style.borderColor = "red";
+                } else {
+                    input.style.borderColor = "#ddd";
+                }
+            });
+
+            if (!valid) {
+                event.preventDefault();
+                alert("Por favor, responde todas las preguntas antes de enviar.");
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Responder las Preguntas</h1>
+    </header>
+
+    <main>
+        <h2>Cuestionario Personalizado</h2>
+        <p>Por favor, responde las siguientes preguntas basadas en tu CV.</p>
+        <form action="{{ url_for('routes.submit_answers', user_id=user_id) }}" method="POST">
+            {% for question in questions %}
+            <div>
+                <label for="answer_{{ loop.index }}">{{ loop.index }}. {{ question }}</label>
+                <input type="text" name="answers" id="answer_{{ loop.index }}" required>
+            </div>
+            {% endfor %}
+            <button type="submit">Enviar Respuestas</button>
+        </form>
+    </main>
+</body>
+</html>

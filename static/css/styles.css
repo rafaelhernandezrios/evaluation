@@ -1,0 +1,403 @@
+/* ----------------------------------------------------
+   1. GENERAL STYLES
+---------------------------------------------------- */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdf6f6; /* Blanco marfil */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Encabezado (Header) con un degradado guinda */
+header {
+    width: 100%;
+    background: linear-gradient(135deg, #800000, #a00000);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 0 0 0 0; /* Ajustar si deseas esquinas redondeadas en top */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+/* Contenedor principal (Main) con sombra y efecto fadeIn */
+main {
+    background: #ffffff; /* Blanco */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1000px; /* Ajustar para acomodar mejor columnas */
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out; /* Animación de aparición */
+    margin-bottom: 20px;
+}
+
+main p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Pie de página (Footer) con fondo guinda */
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: #800000;
+    color: white;
+    border-radius: 0;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: auto; /* Para mantener el footer al final */
+}
+
+/* ----------------------------------------------------
+   2. PROGRESS BAR
+---------------------------------------------------- */
+.progress-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #800000; /* Guinda */
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+/* ----------------------------------------------------
+   3. STEP INDICATORS
+---------------------------------------------------- */
+.step-indicator {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.step-indicator span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.step-indicator span.active {
+    background-color: #800000;
+}
+
+/* ----------------------------------------------------
+   4. FORM & STEPS
+---------------------------------------------------- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+/* Cada paso del formulario (por defecto oculto) */
+.form-step {
+    display: none;
+    opacity: 0;
+    animation: none; /* Reseteamos animaciones */
+}
+
+/* Paso activo (se muestra con animación fadeInStep) */
+.form-step.active {
+    display: block;
+    animation: fadeInStep 0.5s ease-in-out forwards;
+}
+
+/* Pasos de navegación (Anterior, Siguiente, Enviar) */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button.prev-btn {
+    background: #a00000; /* tono más oscuro de guinda */
+}
+button.prev-btn:hover {
+    background: #800000;
+}
+
+button.next-btn,
+button.submit-btn {
+    background: #800000; /* Guinda */
+}
+button.next-btn:hover,
+button.submit-btn:hover {
+    background: #a00000;
+}
+
+/* ----------------------------------------------------
+   5. QUESTIONS & OPTIONS
+---------------------------------------------------- */
+.question {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-left: 4px solid #800000; /* Borde guinda a la izquierda */
+    background-color: #f9f2f2;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Etiquetas de las preguntas */
+.question label {
+    font-weight: bold;
+    color: #800000; /* Guinda */
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Opciones en línea y diferenciadas */
+.options {
+    display: flex;
+    flex-direction: row; /* Alineación horizontal */
+    flex-wrap: wrap;     /* Permite que las opciones se ajusten en línea */
+    gap: 15px;           /* Espacio entre opciones */
+    margin-top: 5px;
+}
+
+.options input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Etiquetas de las opciones */
+.option-label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    color: #800000; /* Guinda */
+}
+
+/* ----------------------------------------------------
+   6. INVALID STATES & FEEDBACK
+---------------------------------------------------- */
+.invalid label,
+.invalid .option-label {
+    color: red !important; /* Forzamos color rojo en estado inválido */
+}
+
+.invalid {
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* ----------------------------------------------------
+   7. BUTTONS
+---------------------------------------------------- */
+button {
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out, transform 0.2s ease;
+    width: 48%; /* Ajustado para que quepan en una línea */
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* ----------------------------------------------------
+   8. ANIMATIONS
+---------------------------------------------------- */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animación para mostrar cada paso con una pequeña transición */
+@keyframes fadeInStep {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animación "spin" (si la usas para loaders u otros elementos) */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ----------------------------------------------------
+   9. RESPONSIVE DESIGN
+---------------------------------------------------- */
+@media (max-width: 768px) {
+    main {
+        max-width: 90%;
+    }
+
+    .options {
+        flex-direction: column; /* En pantallas pequeñas, una sola columna */
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .step-indicator span {
+        width: 8px;
+        height: 8px;
+    }
+}
+/* Ajusta colores y estados de los botones */
+button {
+    background-color: #800000; /* Guinda por defecto */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out, transform 0.2s ease;
+    /* width: 48%;  si necesitas un ancho específico en tu layout */
+}
+
+/* Botón con hover solo si está habilitado */
+button:hover:enabled {
+    background-color: #a00000; /* Guinda más oscura en hover */
+    transform: scale(1.05);
+}
+
+/* Botón deshabilitado */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none; /* Evita que el hover intente escalar */
+}
+/* Contenedor del Loader: oculto por defecto */
+.loader-container {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Ajusta si quieres altura fija o posición centrada absoluta */
+    /* position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); */
+}
+
+/* Cuando esté activo, se muestra */
+.loader-container.active {
+    display: flex;
+}
+
+/* El propio spinner */
+.loader {
+    border: 8px solid #f3f3f3;         /* Fondo gris claro */
+    border-top: 8px solid #800000;     /* Guinda en la parte superior */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; /* Gira indefinidamente */
+    margin: 20px auto;
+}
+
+/* Animación de giro */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* Centrar el loader y ocultarlo por defecto */
+.loading {
+    display: none;              /* Oculto inicialmente */
+    flex-direction: column;     /* Centrado en columna */
+    justify-content: center;    
+    align-items: center;
+    position: fixed;            /* Para centrar en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;               /* Encima de todo */
+    background-color: rgba(0, 0, 0, 0.3); /* Fondo semi-transparente */
+}
+
+/* Cuando se active, se mostrará con fade-in */
+.loading.active {
+    display: flex;
+    animation: fadeIn 0.4s ease forwards; /* Aparece con la animación */
+}
+
+/* Loader circular */
+.loader {
+    border: 8px solid #f3f3f3;  /* Color de fondo para el spinner */
+    border-top: 8px solid #800000; /* Guinda en la parte superior */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite; 
+    margin-bottom: 20px; /* Espacio con el texto */
+}
+
+/* Texto debajo del loader */
+.loading p {
+    color: #fff;
+    font-size: 1.1rem;
+    text-align: center;
+    max-width: 300px;
+}
+
+/* Animación de giro (spinner) */
+@keyframes spin {
+    0%   { transform: rotate(0deg);   }
+    100% { transform: rotate(360deg); }
+}
+
+/* Fade-in para el contenedor loading */
+@keyframes fadeIn {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+    

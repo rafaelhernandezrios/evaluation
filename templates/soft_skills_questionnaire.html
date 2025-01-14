@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Habilidades Blandas</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("soft-skills-form");
+            const steps = document.querySelectorAll(".form-step");
+            const nextBtn = document.getElementById("next-btn");
+            const prevBtn = document.getElementById("prev-btn");
+            const submitBtn = document.getElementById("submit-btn");
+            const progressBar = document.getElementById("progress-bar");
+            const stepIndicators = document.querySelectorAll(".step-indicator span");
+            let currentStep = 0;
+
+            // Mostrar el primer paso
+            showStep(currentStep);
+
+            function showStep(n) {
+                steps.forEach((step, index) => {
+                    step.classList.remove("active");
+                    if(index === n){
+                        step.classList.add("active");
+                    }
+                });
+
+                // Actualizar botones
+                prevBtn.style.display = n === 0 ? "none" : "inline-block";
+                nextBtn.style.display = n === (steps.length - 1) ? "none" : "inline-block";
+                submitBtn.style.display = n === (steps.length - 1) ? "inline-block" : "none";
+
+                // Actualizar barra de progreso
+                const progressPercent = ((n) / (steps.length)) * 100;
+                progressBar.style.width = progressPercent + "%";
+
+                // Actualizar indicadores de paso
+                stepIndicators.forEach((indicator, index) => {
+                    if(index <= n){
+                        indicator.classList.add("active");
+                    } else {
+                        indicator.classList.remove("active");
+                    }
+                });
+            }
+
+            nextBtn.addEventListener("click", function() {
+                if(validateStep(currentStep)){
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+
+            prevBtn.addEventListener("click", function() {
+                currentStep--;
+                showStep(currentStep);
+            });
+
+            // Validación de cada paso
+            function validateStep(n) {
+                const step = steps[n];
+                const radioGroups = step.querySelectorAll(".question");
+                let valid = true;
+                radioGroups.forEach(group => {
+                    const radios = group.querySelectorAll("input[type='radio']");
+                    const isChecked = Array.from(radios).some(radio => radio.checked);
+                    if(!isChecked){
+                        valid = false;
+                        group.classList.add("invalid");
+                    } else {
+                        group.classList.remove("invalid");
+                    }
+                });
+                if(!valid){
+                    alert("Por favor, responde todas las preguntas antes de continuar.");
+                }
+                return valid;
+            }
+
+            // Validación final antes de enviar
+            form.addEventListener("submit", function(event) {
+                const allQuestions = form.querySelectorAll(".question");
+                let valid = true;
+                allQuestions.forEach(question => {
+                    const radios = question.querySelectorAll("input[type='radio']");
+                    const isChecked = Array.from(radios).some(radio => radio.checked);
+                    if(!isChecked){
+                        valid = false;
+                        question.classList.add("invalid");
+                    } else {
+                        question.classList.remove("invalid");
+                    }
+                });
+
+                if(!valid){
+                    event.preventDefault();
+                    alert("Por favor, responde todas las preguntas antes de enviar.");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Cuestionario de Habilidades Blandas</h1>
+    </header>
+    <main>
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+
+        <div class="step-indicator">
+            <!-- Generar 8 indicadores para 80 preguntas (10 por paso) -->
+            {% for i in range(1,9) %}
+                <span class="{{ 'active' if i ==1 else '' }}"></span>
+            {% endfor %}
+        </div>
+
+        <form id="soft-skills-form" action="{{ url_for('routes.soft_skills_questionnaire', user_id=user_id) }}" method="POST">
+            <!-- Paso 1: Preguntas 1-10 -->
+            <div class="form-step active">
+                {% for i in range(1,11) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 2: Preguntas 11-20 -->
+            <div class="form-step">
+                {% for i in range(11,21) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 3: Preguntas 21-30 -->
+            <div class="form-step">
+                {% for i in range(21,31) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 4: Preguntas 31-40 -->
+            <div class="form-step">
+                {% for i in range(31,41) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 5: Preguntas 41-50 -->
+            <div class="form-step">
+                {% for i in range(41,51) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 6: Preguntas 51-60 -->
+            <div class="form-step">
+                {% for i in range(51,61) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 7: Preguntas 61-70 -->
+            <div class="form-step">
+                {% for i in range(61,71) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paso 8: Preguntas 71-80 -->
+            <div class="form-step">
+                {% for i in range(71,81) %}
+                <div class="question">
+                    <label for="soft{{ i }}">{{ i }}. {{ soft_questions[i-1] }}</label>
+                    <div class="options">
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_1" value="1" required>
+                        <label for="soft{{ i }}_1" class="option-label">Rara vez o nunca</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_2" value="2">
+                        <label for="soft{{ i }}_2" class="option-label">Pocas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_3" value="3">
+                        <label for="soft{{ i }}_3" class="option-label">Algunas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_4" value="4">
+                        <label for="soft{{ i }}_4" class="option-label">Muchas veces</label>
+
+                        <input type="radio" name="soft{{ i }}" id="soft{{ i }}_5" value="5">
+                        <label for="soft{{ i }}_5" class="option-label">Muy frecuentemente o siempre</label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Botones de Navegación -->
+            <div class="navigation-buttons">
+                <button type="button" id="prev-btn" class="prev-btn">Anterior</button>
+                <button type="button" id="next-btn" class="next-btn">Siguiente</button>
+                <button type="submit" id="submit-btn" class="submit-btn" style="display: none;">Enviar Respuestas</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <p>© 2025 Cuestionario de Habilidades Blandas</p>
+    </footer>
+</body>
+</html>
